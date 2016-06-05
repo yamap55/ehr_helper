@@ -23,6 +23,7 @@ console.log("extention example.")
 
 // カウンターを取得
 var getCounter = function(){
+    console.log($.fn.jquery);
     return counter;
 };
 
@@ -33,6 +34,18 @@ var updateCounter = function( counter ){
 
 var Util = {
   a: function() {
-    
+  },
+  parseMinutes: function (num) {
+    // 「00:00」、「0000」形式の文字列を分に変換する。
+    // 「000」など3桁はNG。
+    if (num == '') {
+      return 0;
+    }
+    var m = num.match(/^(\d\d):?(\d\d)$/);
+    return parseInt(m[1]) * 60 + parseInt(m[2]);
+  },
+  parse0000 : function (num) {
+    // 分を「0000」形式に変換する。
+    return ('0' + (num / 60 | 0)).slice( - 2) + ('0' + (num % 60)).slice( - 2);
   }
 };
