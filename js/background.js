@@ -47,5 +47,36 @@ var Util = {
   parse0000 : function (num) {
     // 分を「0000」形式に変換する。
     return ('0' + (num / 60 | 0)).slice( - 2) + ('0' + (num % 60)).slice( - 2);
-  }
+  },
+  getTableData : function () {
+    // TableのDataを取得。フォーマットは以下の通り。
+    // [{id:プロジェクトのtrを指すID,name:プロジェクト名,jobs:[{id:プロジェクト内のタスクのtrを指すID,name:タスク名},{...}]}]
+    if (self.data) {
+      return self.data;
+    }
+    var data = [
+    ];
+    var jobs;
+    $('#projectTableTR table tr').each(function () {
+      var id = $(this).attr('id');
+      if (/project_tr_.*/.test(id)) {
+        jobs = [
+        ];
+        data.push({
+          id: id,
+          name: $($(this).find('td') [0]).text().trim(),
+          jobs: jobs,
+        });
+      } else if (/project_job_tr_.*/.test(id)) {
+        jobs.push({
+          id: id,
+          name: $($(this).find('td') [0]).text().trim(),
+        });
+      }
+    }
+    );
+    self.data = data;
+    //console.log(data);
+    return self.data;
+  };
 };
