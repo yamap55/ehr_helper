@@ -78,5 +78,9 @@ var Util = {
     self.data = data;
     //console.log(data);
     return self.data;
-  };
+  },
+  setTimeForText : function (textbox, time) {
+    // blurだけでは変換してくれなかったのでclickも起動
+    textbox.val(time).trigger('click').trigger('blur');
+  }
 };
