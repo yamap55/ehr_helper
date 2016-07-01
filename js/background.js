@@ -33,8 +33,6 @@ var updateCounter = function( counter ){
 };
 
 var Util = {
-  a: function() {
-  },
   parseMinutes: function (num) {
     // 「00:00」、「0000」形式の文字列を分に変換する。
     // 「000」など3桁はNG。
@@ -49,13 +47,7 @@ var Util = {
     return ('0' + (num / 60 | 0)).slice( - 2) + ('0' + (num % 60)).slice( - 2);
   },
   getTableData : function () {
-    // TableのDataを取得。フォーマットは以下の通り。
-    // [{id:プロジェクトのtrを指すID,name:プロジェクト名,jobs:[{id:プロジェクト内のタスクのtrを指すID,name:タスク名},{...}]}]
-    if (self.data) {
-      return self.data;
-    }
-    var data = [
-    ];
+    var data = [];
     var jobs;
     $('#projectTableTR table tr').each(function () {
       var id = $(this).attr('id');
@@ -75,12 +67,61 @@ var Util = {
       }
     }
     );
-    self.data = data;
-    //console.log(data);
-    return self.data;
-  },
+    return (function() {
+      return data;
+    });
+//    // TableのDataを取得。フォーマットは以下の通り。
+//    // [{id:プロジェクトのtrを指すID,name:プロジェクト名,jobs:[{id:プロジェクト内のタスクのtrを指すID,name:タスク名},{...}]}]
+//    if (self.data) {
+//      return self.data;
+//    }
+//    var data = [
+//    ];
+//    var jobs;
+//    $('#projectTableTR table tr').each(function () {
+//      var id = $(this).attr('id');
+//      if (/project_tr_.*/.test(id)) {
+//        jobs = [
+//        ];
+//        data.push({
+//          id: id,
+//          name: $($(this).find('td') [0]).text().trim(),
+//          jobs: jobs,
+//        });
+//      } else if (/project_job_tr_.*/.test(id)) {
+//        jobs.push({
+//          id: id,
+//          name: $($(this).find('td') [0]).text().trim(),
+//        });
+//      }
+//    }
+//    );
+//    self.data = data;
+//    //console.log(data);
+//    return self.data;
+  }(),
   setTimeForText : function (textbox, time) {
     // blurだけでは変換してくれなかったのでclickも起動
     textbox.val(time).trigger('click').trigger('blur');
-  }
+  },
+  getSettingData : function(data) {
+    // 取得したdataを保存
+    localStorage.setItem(Util.KEY, JSON.stringify(data));
+  },
+  KEY : 'EHR_HELPER',
+  getSettingData : function() {
+    return localStorage.getItem(Util.KEY) ? JSON.parse(localStorage.getItem(Util.KEY)) : Util.DEFAULT_SETTING_LIST;
+  },
+  DEFAULT_SETTING_LIST : [
+    ['会議A',
+    '会議（000003000000）',
+    '0001なし',
+    '0015'],
+    [
+      '会議B',
+      'プロジェクト会議（000002020110）',
+      '1004開発／会議',
+      '0030',
+    ],
+  ]
 };
