@@ -8,32 +8,18 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "browser_action": {
-    "default_icon": "icons/icon16.png",
-    "default_title": "Sample",
-    "default_popup": "popup.html"
-  },
   "content_scripts": [
     {
       "matches": [
-        "https://*/attendance/dailyTimeManagementUpdate.do*"
+        "https://*/*/attendance/dailyTimeManagementUpdate.do*"
       ],
       "js": [
-        "js/content-script.js",
-        "js/lib/jquery-2.2.4.min.js"
+        "js/lib/jquery-2.2.4.min.js",
+        "js/content-script.js"
       ]
     }
   ],
-  "web_accessible_resources": [
-    "js/embeded-script.js"
-  ],
   "permissions": [
     "<all_urls>"
-  ],
-  "background": {
-    "scripts": [
-      "js/background.js",
-      "js/lib/jquery-2.2.4.min.js"
-    ]
-  }
+  ]
 }
