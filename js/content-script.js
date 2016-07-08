@@ -11,6 +11,7 @@ var DEFAULT_SETTING_LIST = [
     '0030',
   ],
 ];
+var TIME_ADD_LIST = ["all","+5","+30","-5","-30"];
 
 var Util = {
   parseMinutes: function (num) {
@@ -24,7 +25,7 @@ var Util = {
   },
   parse0000 : function (num) {
     // 分を「0000」形式に変換する。
-    return ('0' + (num / 60 | 0)).slice( - 2) + ('0' + (num % 60)).slice( - 2);
+    return num <= 0 ? '0000':('0' + (num / 60 | 0)).slice( - 2) + ('0' + (num % 60)).slice( - 2);
   },
   setTimeForText : function (textbox, time) {
     // blurだけでは変換してくれなかったのでclickも起動
@@ -36,17 +37,35 @@ var Util = {
   },
   getSettingData : function() {
     return localStorage.getItem(Util.KEY) ? JSON.parse(localStorage.getItem(Util.KEY)) : Util.DEFAULT_SETTING_LIST;
+  },
+  setAllTime : function (targetTextBox) {
+    //var t = $($(this).closest('tr').find('input[type=\'text\']') [0]);
+    var time = this.parseMinutes(targetTextBox.val());
+    var remainingTime = $('#calc_attend_2_project_hours').text();
+    if (remainingTime.match(/^-/)) {
+      // 残時間が「-」の場合、値が設定されていた場合にはスルー。
+      if (time == 0) {
+        this.setTime(targetTextBox, '00:00');
+      }
+    } else {
+      // 残時間が「+」の場合
+      if (time != 0) {
+        // 既に値が設定されていた場合は加算。
+        remainingTime = this.parse0000(time + this.parseMinutes(remainingTime));
+      }
+      this.setTimeForText(targetTextBox, remainingTime);
+    }
   }
 };
 
+// 作業名称と小タスクのテーブルデータを取得する。
 var getTableData = function () {
   var data = [];
   var jobs;
   $('#projectTableTR table tr').each(function () {
     var id = $(this).attr('id');
     if (/project_tr_.*/.test(id)) {
-      jobs = [
-      ];
+      jobs = [];
       data.push({
         id: id,
         name: $($(this).find('td') [0]).text().trim(),
@@ -58,20 +77,18 @@ var getTableData = function () {
         name: $($(this).find('td') [0]).text().trim(),
       });
     }
-  }
-  );
+  });
   return data;
 };
 var tableData = getTableData();
 var EhrHelper = function(data){
   this.data = data;
 };
+// 打刻忘れ通知
 EhrHelper.prototype.timeClockNotification = function () {
-  // 打刻忘れ通知
   var div = $('.box .folder').filter(function () {
     return $(this).find('h2').text() == '出退社時刻';
-  }
-  );
+  });
   var tds = div.find('td');
   var css = {
     'cssText': 'background-color : red !important'
@@ -84,5 +101,42 @@ EhrHelper.prototype.timeClockNotification = function () {
   }
 };
 
+// 各タスクに時間の加減ボタンを追加する。
+EhrHelper.prototype.addTimeButton = function() {
+  // 時間の加算減算（+X,-X）を行う
+  var f = function () {
+    var t = $($(this).closest('tr').find('input[type=\'text\']') [0]);
+    var array = $(this).attr('value').match(/^([+-])(\d+)$/);
+    var symbol = array[1];
+    var i = parseInt(array[2]);
+    if (t.val()) {
+      if (symbol == '+') {
+        i += Util.parseMinutes(t.val());
+      } else {
+        i = Util.parseMinutes(t.val()) - i;
+      }
+    }
+    Util.setTimeForText(t, Util.parse0000(i));
+  };
+  // 残り時間をそのまま設定する。
+  var ff = function () {
+    var t = $($(this).closest('tr').find('input[type=\'text\']') [0]);
+    Util.setAllTime(t);
+  };
+  // ボタン群を作成。
+  var addBtnArea = $('<span>', {name: 'addBtnArea'});
+  var addTimeBtn = $('<input>', {type: 'button'});
+  $.each(TIME_ADD_LIST,(i,addTime)=>{
+    var addFunc = addTime.toLowerCase() == "all" ? ff : f;
+    addTimeBtn.clone().attr('value',addTime).on('click',addFunc).appendTo(addBtnArea);
+  });
+  // ボタン群を各タスクの左前に追加。
+  $('[id^=\'project_job_tr_\']').each(function () {
+    $(this).find('td:first').prepend(addBtnArea.clone(true));
+  });
+};
+
 var ehrHelper = new EhrHelper(tableData);
+// TODO 設定で有効有無を切り替えられるようにする。
 ehrHelper.timeClockNotification();
+ehrHelper.addTimeButton();
