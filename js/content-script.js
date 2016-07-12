@@ -136,7 +136,28 @@ EhrHelper.prototype.addTimeButton = function() {
   });
 };
 
+// 操作領域。
+EhrHelper.prototype.operationContainer = $('<div id=\'operationContainer\'>').css({
+      'position': 'fixed',
+      'top': '250px',
+      'right': '10px',
+      'z-index': '999',
+      'width': '120px',
+      'background': '#F4A28D',
+      'border-radius': '10px',
+      '-moz-border-radius': '10px',
+      '-webkit-border-radius': '10px',
+      'padding-bottom': '10px'
+    });
+
+// 操作領域。
+EhrHelper.prototype.addOperationContainer = function() {
+  $("body").append(this.operationContainer);
+};
+
+
 var ehrHelper = new EhrHelper(tableData);
 // TODO 設定で有効有無を切り替えられるようにする。
 ehrHelper.timeClockNotification();
 ehrHelper.addTimeButton();
+ehrHelper.addOperationContainer();
