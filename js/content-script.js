@@ -11,7 +11,7 @@ var DEFAULT_SETTING_LIST = [
     '0030',
   ],
 ];
-var TIME_ADD_LIST = ["all","+5","+30","-5","-30"];
+var DEFAULT_TIME_ADD_LIST = ["all","+5","+30","-5","-30"];
 
 var Util = {
   parseMinutes: function (num) {
@@ -126,7 +126,7 @@ EhrHelper.prototype.addTimeButton = function() {
   // ボタン群を作成。
   var addBtnArea = $('<span>', {name: 'addBtnArea'});
   var addTimeBtn = $('<input>', {type: 'button'});
-  $.each(TIME_ADD_LIST,(i,addTime)=>{
+  $.each(DEFAULT_TIME_ADD_LIST,(i,addTime)=>{
     var addFunc = addTime.toLowerCase() == "all" ? ff : f;
     addTimeBtn.clone().attr('value',addTime).on('click',addFunc).appendTo(addBtnArea);
   });
@@ -138,26 +138,40 @@ EhrHelper.prototype.addTimeButton = function() {
 
 // 操作領域。
 EhrHelper.prototype.operationContainer = $('<div id=\'operationContainer\'>').css({
-      'position': 'fixed',
-      'top': '250px',
-      'right': '10px',
-      'z-index': '999',
-      'width': '120px',
-      'background': '#F4A28D',
-      'border-radius': '10px',
-      '-moz-border-radius': '10px',
-      '-webkit-border-radius': '10px',
-      'padding-bottom': '10px'
-    });
+    'position': 'fixed',
+    'top': '250px',
+    'right': '10px',
+    'z-index': '999',
+    'width': '120px',
+    'background': '#F4A28D',
+    'border-radius': '10px',
+    '-moz-border-radius': '10px',
+    '-webkit-border-radius': '10px',
+    'padding-bottom': '10px'
+  }
+);
 
-// 操作領域。
+// xボタン。（閉じるボタン）
+EhrHelper.prototype.closeButton =  $('<p>').text('×').on('click', function () {
+  $(this).closest('#operationContainer').hide();
+}).css({
+  'cursor': 'pointer',
+  'font-size': '150%'
+});
+
+// 操作領域追加。
 EhrHelper.prototype.addOperationContainer = function() {
   $("body").append(this.operationContainer);
 };
 
+// 操作領域に閉じるボタンを追加する。
+EhrHelper.prototype.addClosebutton = function() {
+  this.operationContainer.append(this.closeButton);
+};
 
 var ehrHelper = new EhrHelper(tableData);
 // TODO 設定で有効有無を切り替えられるようにする。
 ehrHelper.timeClockNotification();
 ehrHelper.addTimeButton();
 ehrHelper.addOperationContainer();
+ehrHelper.addClosebutton();
