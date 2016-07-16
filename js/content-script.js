@@ -46,13 +46,14 @@ var Util = {
     // 設定値を反映するため、閉じるボタンにfocusをあてることで既存の関数を呼び出す。
     textbox.val(time);
     $("#targetIdArea").val(textbox.attr("id"));
-		$("#closeBtn").focus().blur();
+    $("#closeBtn").focus().blur();
   },
   setSettingData : function(data) {
     // 取得したdataを保存
     localStorage.setItem(Util.KEY, JSON.stringify(data));
   },
   getSettingData : function() {
+    // 保存したdataを取得
     return localStorage.getItem(KEY) ? JSON.parse(localStorage.getItem(KEY)) : DEFAULT_SETTING_LIST;
   },
   setAllTime : function (targetTextBox) {
