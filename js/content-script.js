@@ -183,7 +183,8 @@ EhrHelper.prototype.closeButton =  $('<a>').attr({"id":"closeBtn","href":"#"}).t
   return false;
 }).css({
   'cursor': 'pointer',
-  'font-size': '150%'
+  'font-size': '150%',
+  'text-decoration': 'none',
 });
 
 // 操作領域追加。
