@@ -28,6 +28,15 @@ var DEFAULT_SETTING_LIST = [
 ];
 var DEFAULT_TIME_ADD_LIST = ["all","+5","+30","-5","-30"];
 
+var DEFAULT_COMMENT_TEMPLATE = {
+  "":"",
+  "電車遅延":"電車遅延のため始業時刻修正。",
+  "出社打刻忘れ":"出社時刻打刻忘れ。",
+  "退社打刻忘れ":"退社時刻打刻忘れ。",
+  "体調不良":"体調不良のため遅刻。",
+  "家庭事情":"家庭事情のため遅刻。"
+};
+
 var Util = {
   parseMinutes: function (num) {
     // 「00:00」、「0000」形式の文字列を分に変換する。
@@ -233,6 +242,19 @@ EhrHelper.prototype.addSettingData = function (){
   $('#hoge > li > span').css('width', '50px');
 };
 
+// 本人コメント欄のテンプレートを追加する。
+EhrHelper.prototype.addCommentTemplate = function (){
+  var commentArea =$("textarea[name='userComment']");
+  var selectElem = $("<select>").on("change",function() {
+    commentArea.text($(this).val());
+  });
+
+  $.each(DEFAULT_COMMENT_TEMPLATE,function(d,i){
+    $("<option>").val(d).text(d).appendTo(selectElem);
+  });
+  commentArea.parent().append(selectElem);
+};
+
 var ehrHelper = new EhrHelper(tableData);
 // TODO 設定で有効有無を切り替えられるようにする。
 ehrHelper.timeClockNotification();
@@ -240,3 +262,4 @@ ehrHelper.addTimeButton();
 ehrHelper.addOperationContainer();
 ehrHelper.addClosebutton();
 ehrHelper.addSettingData();
+ehrHelper.addCommentTemplate();
