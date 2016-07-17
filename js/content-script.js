@@ -238,8 +238,8 @@ EhrHelper.prototype.addSettingData = function (){
     });
   });
   this.operationContainer.append(buttonList);
-  $('#hoge > *').css('margin', '0px 0px 0px 0px');
-  $('#hoge > li > span').css('width', '50px');
+  $('#operationContainer > *').css('margin', '0px 0px 0px 0px');
+  $('#operationContainer > li > span').css('width', '50px');
 };
 
 // 本人コメント欄のテンプレートを追加する。
