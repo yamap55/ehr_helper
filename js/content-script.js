@@ -28,7 +28,7 @@ var DEFAULT_SETTING_LIST = [
 ];
 var DEFAULT_TIME_ADD_LIST = ["all","+5","+30","-5","-30"];
 
-var DEFAULT_COMMENT_TEMPLATE = {
+var DEFAULT_COMMENT_TEMPLATES = {
   "":"",
   "電車遅延":"電車遅延のため始業時刻修正。",
   "出社打刻忘れ":"出社時刻打刻忘れ。",
@@ -57,13 +57,21 @@ var Util = {
     $("#targetIdArea").val(textbox.attr("id"));
     $("#closeBtn").focus().blur();
   },
-  setSettingData : function(data) {
-    // 取得したdataを保存
-    localStorage.setItem(Util.KEY, JSON.stringify(data));
-  },
-  getSettingData : function() {
-    // 保存したdataを取得
-    return localStorage.getItem(KEY) ? JSON.parse(localStorage.getItem(KEY)) : DEFAULT_SETTING_LIST;
+  // saveData : function(data) {
+  //   // 取得したdataを保存
+  //   localStorage.setItem(Util.KEY, JSON.stringify(data));
+  // },
+  getSaveData : function() {
+    // 保存したdataを取得。
+    if (localStorage.getItem(KEY)) {
+      return localStorage.getItem(KEY);
+    }
+    // 保尊されていない場合はデフォルトを返す。
+    return {
+      settingList : DEFAULT_SETTING_LIST,
+      timeAddList : DEFAULT_TIME_ADD_LIST,
+      commentTemplates : DEFAULT_COMMENT_TEMPLATES,
+    };
   },
   setAllTime : function (targetTextBox) {
     var time = this.parseMinutes(targetTextBox.val());
@@ -152,7 +160,7 @@ EhrHelper.prototype.addTimeButton = function() {
   // ボタン群を作成。
   var addBtnArea = $('<span>', {name: 'addBtnArea'});
   var addTimeBtn = $('<input>', {type: 'button'});
-  $.each(DEFAULT_TIME_ADD_LIST,(i,addTime)=>{
+  $.each(Util.getSaveData().timeAddList,(i,addTime)=>{
     var addFunc = addTime.toLowerCase() == "all" ? ff : f;
     addTimeBtn.clone().attr('value',addTime).on('click',addFunc).appendTo(addBtnArea);
   });
@@ -230,7 +238,7 @@ EhrHelper.prototype.setTime = function (projectName, taskName, time) {
 EhrHelper.prototype.addSettingData = function (){
   var self = this;
   // 設定からボタンのListを作成。
-  var buttonList = $.map(Util.getSettingData(), function (settingData) {
+  var buttonList = $.map(Util.getSaveData().settingList, function (settingData) {
     return $('<p>').text(settingData[0]).bind('click', function () {
       self.setTime(settingData[1], settingData[2], settingData[3]);
     }).css({
@@ -250,7 +258,7 @@ EhrHelper.prototype.addCommentTemplate = function (){
     commentArea.text($(this).val());
   });
 
-  $.each(DEFAULT_COMMENT_TEMPLATE,function(d,i){
+  $.each(Util.getSaveData().commentTemplates,function(d,i){
     $("<option>").val(d).text(d).appendTo(selectElem);
   });
   commentArea.parent().append(selectElem);
