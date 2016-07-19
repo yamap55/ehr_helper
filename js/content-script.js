@@ -381,6 +381,19 @@ EhrHelper.prototype.settingWindowButton = $('<input type=\'button\'>').attr({
   $("#settingWindow").toggle('fast');
 });
 
+// 全て閉じるボタン追加。
+EhrHelper.prototype.addAllCloseButton = function () {
+  var allCloseButton = $('<input>', {
+    type: 'button',
+    value: '全て閉じる'
+  }).on('click', function () {
+    $('#projectTableTR table img').filter(function () {
+      return $(this).attr('src') == '/m3-group/images/dhtmlgoodies_minus.gif'
+    }).click();
+  });
+  $('#projectTableTR table').before(allCloseButton);
+};
+
 var ehrHelper = new EhrHelper(tableData);
 // TODO 設定で有効有無を切り替えられるようにする。
 ehrHelper.timeClockNotification();
@@ -390,3 +403,4 @@ ehrHelper.addClosebutton();
 ehrHelper.addSettingData();
 ehrHelper.addCommentTemplate();
 ehrHelper.addSettingWindowButton();
+ehrHelper.addAllCloseButton();
