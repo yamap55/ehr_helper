@@ -116,6 +116,10 @@ var getTableData = function () {
 };
 var tableData = getTableData();
 
+var SettingWindowOperator = function(data) {
+  this.data = data;
+};
+
 // EhrHelper
 var EhrHelper = function(data){
   this.data = data;
