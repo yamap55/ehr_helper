@@ -37,8 +37,6 @@ var getTableData = function () {
 };
 var tableData = getTableData();
 
-
-
 var ehrHelper = new EhrHelper(tableData);
 // TODO 設定で有効有無を切り替えられるようにする。
 ehrHelper.timeClockNotification();

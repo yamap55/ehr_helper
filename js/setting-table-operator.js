@@ -9,24 +9,43 @@ var SettingWindowOperator = function(data) {
   this.settingWindow.append(this.closeButton,this.saveButton,this.addTrButton,this.settingTable,this.messageArea);
   this.init();
 };
+
+// 初期処理。
 SettingWindowOperator.prototype.init = function() {
   this.closeButton.on('click', ()=>{
     this.settingWindow.hide('fast');
   });
-  this.saveButton.on('click', function () {
-    // TODO
-    // var data = getSettingData();
-    // // 取得したdataを保存
-    // localStorage.setItem(KEY, JSON.stringify(data));
-    // console.log("保存しました。");
-    // console.log(JSON.stringify(data));
-    // console.log(data);
+  this.saveButton.on('click', () =>{
+    var settingData = this.getSettingData();
+    var data = Util.getSaveData();
+    data.settingList = settingData;
+    Util.saveData(data);
   });
   this.messageAreaSetting();
   this.settingSettingTable();
   this.addTrButton.on('click', ()=>{
     this.settingTable.append(this.createTr('', '', '', ''));
   });
+};
+
+// 設定テーブルの値を取得。
+SettingWindowOperator.prototype.getSettingData = function() {
+  var data = $('#settingTable tr:not(#tablehead)').map(
+    function(i,tr) {
+      var trdata = $(tr).find('td').map(
+        function(i,td){
+          return $(td).find("input[type='text']").val();
+        }
+      ).get();
+      return [trdata];
+    }
+  ).get().filter(
+    // 全ての項目が空の場合は除去。
+    function(array){
+      return array.every(function(o){return o.trim()});
+    }
+  );
+  return data;
 };
 
 // 設定窓

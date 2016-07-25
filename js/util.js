@@ -42,14 +42,16 @@ var Util = {
     $("#targetIdArea").val(textbox.attr("id"));
     $("#closeBtn").focus().blur();
   },
-  // saveData : function(data) {
-  //   // 取得したdataを保存
-  //   localStorage.setItem(Util.KEY, JSON.stringify(data));
-  // },
+  saveData : function(data) {
+    console.log(data);
+    // 取得したdataを保存
+    localStorage.setItem(KEY, JSON.stringify(data));
+    console.log(JSON.parse(localStorage.getItem(KEY)));
+  },
   getSaveData : function() {
     // 保存したdataを取得。
     if (localStorage.getItem(KEY)) {
-      return localStorage.getItem(KEY);
+      return JSON.parse(localStorage.getItem(KEY));
     }
     // 保尊されていない場合はデフォルトを返す。
     return {

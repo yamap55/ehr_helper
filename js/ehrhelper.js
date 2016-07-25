@@ -103,8 +103,6 @@ EhrHelper.prototype.setTime = function (projectName, taskName, time) {
   }
 
   var target = $($('#' + job.id + ' input[type="text"]') [0]);
-  console.log('#' + job.id + ' input[type="text"]');
-  console.log(target);
   if (time.toLowerCase() === "all") {
     Util.setAllTime(target);
   } else {
