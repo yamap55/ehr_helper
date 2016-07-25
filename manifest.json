@@ -1,6 +1,6 @@
 {
   "name": "ehr registration helper.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "manifest_version": 2,
   "description": "毎日行うちょっと面倒なEHR入力を少し楽にします。",
   "icons": {
