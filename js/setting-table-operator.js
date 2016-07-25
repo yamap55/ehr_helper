@@ -10,8 +10,8 @@ var SettingWindowOperator = function(data) {
   this.init();
 };
 SettingWindowOperator.prototype.init = function() {
-  this.closeButton.on('click', function () {
-    $("#settingWindow").hide('fast');
+  this.closeButton.on('click', ()=>{
+    this.settingWindow.hide('fast');
   });
   this.saveButton.on('click', function () {
     // TODO
@@ -29,6 +29,7 @@ SettingWindowOperator.prototype.init = function() {
   });
 };
 
+// 設定窓
 SettingWindowOperator.prototype.settingWindow = $('<div>').css({
   'position': 'fixed',
   'top': '10%',
