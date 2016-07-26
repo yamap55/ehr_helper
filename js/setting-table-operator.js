@@ -24,7 +24,11 @@ SettingWindowOperator.prototype.init = function() {
   this.messageAreaSetting();
   this.settingSettingTable();
   this.addTrButton.on('click', ()=>{
-    this.settingTable.append(this.createTr('', '', '', ''));
+    var indexList = this.settingTable.find("[name='no']").map(function(){
+      return $(this).text();
+    }).get();
+    var maxNo = Math.max.apply(null,indexList);
+    this.settingTable.append(this.createTr(maxNo+1,'', '', '', ''));
   });
 };
 
@@ -72,28 +76,34 @@ SettingWindowOperator.prototype.saveButton = $('<input>').attr({
 });
 
 // tr作成関数。
-SettingWindowOperator.prototype.createTr = function (viewName, projectName, taskName, time, thFlag) {
+SettingWindowOperator.prototype.createTr = function (no,viewName, projectName, taskName, time, thFlag) {
   if (thFlag) {
     var td = $('<th>').css(this.tableCss);
+    var n = td.clone().text(no);
     var v = td.clone().text(viewName);
     var p = td.clone().text(projectName);
     var t = td.clone().text(taskName);
     var ti = td.clone().text(time);
     var h = td.clone().text("-");
-    return $('<tr>',{'id':'tablehead'}).css(this.tableCss).append(v, p, t, ti,h);
+    return $('<tr>',{'id':'tablehead'}).css(this.tableCss).append(n,v, p, t, ti,h);
   } else {
     var resultTr = $('<tr>').css(this.tableCss);
-    var createTd = (str)=> {
-      td = $('<td>').css(this.tableCss);
-      $('<input>').attr({'type':'text'}).val(str).appendTo(td);
+    var createTd = (str,name)=> {
+      var td = $('<td>').css(this.tableCss);
+      $('<input>').attr({
+        'type':'text',
+        'name':name,
+        'autocomplete':'off'
+      }).css('display','block').val(str).appendTo(td);
       return td;
     };
-    var v = createTd(viewName);
-    var p = createTd(projectName);
-    var t = createTd(taskName);
-    var ti = createTd(time);
+    var n = $('<td>').attr('name','no').css(this.tableCss).text(no);
+    var v = createTd(viewName,'viewName');
+    var p = createTd(projectName,'projectName');
+    var t = createTd(taskName,'taskName');
+    var ti = createTd(time,'time');
     var closeTd = $('<td>').css(this.tableCss).append($('<input>').attr({'type':'button','value':'×'}).css('width','20px').on('click',function(){resultTr.remove();}));
-    return resultTr.append(v, p, t, ti,closeTd);
+    return resultTr.append(n,v, p, t, ti,closeTd);
   }
 };
 
@@ -112,10 +122,10 @@ SettingWindowOperator.prototype.messageAreaSetting = function(){[
 SettingWindowOperator.prototype.settingSettingTable = function() {
   var self = this;
   // ヘッダの作成
-  this.settingTable.append(this.createTr('表示名', 'プロジェクト名', 'タスク名', '時間', true));
+  this.settingTable.append(this.createTr('No','表示名', 'プロジェクト名', 'タスク名', '時間', true));
   // データを復旧。
   $.each(Util.getSaveData().settingList,function(i,d) {
-    self.settingTable.append(self.createTr(d[0], d[1], d[2], d[3]));
+    self.settingTable.append(self.createTr(i+1,d[0], d[1], d[2], d[3]));
   });
 };
 
