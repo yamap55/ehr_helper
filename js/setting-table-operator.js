@@ -4,6 +4,16 @@ var SettingWindowOperator = function(data) {
     'border-collapse': 'collapse',
     'border': '1px solid #333'
   };
+  this.suggestAreaCss = {
+    "display":"none",
+    "width": "200px",
+    "overflow": "hidden",
+    "white-space": "nowrap",
+    "position": "absolute",
+    "background-color": "#FFFFFF",
+    "border": "1px solid #CCCCFF",
+    "font-size": "90%",
+  };
   this.settingTable = $('<table>').attr({'id':'settingTable'}).css(this.tableCss);
   this.data = data;
   this.settingWindow.append(this.closeButton,this.saveButton,this.addTrButton,this.settingTable,this.messageArea);
@@ -88,20 +98,22 @@ SettingWindowOperator.prototype.createTr = function (no,viewName, projectName, t
     return $('<tr>',{'id':'tablehead'}).css(this.tableCss).append(n,v, p, t, ti,h);
   } else {
     var resultTr = $('<tr>').css(this.tableCss);
-    var createTd = (str,name)=> {
+    var createTd = (str,name,no)=> {
       var td = $('<td>').css(this.tableCss);
       $('<input>').attr({
         'type':'text',
+        'id':name+'_'+no,
         'name':name,
         'autocomplete':'off'
       }).css('display','block').val(str).appendTo(td);
       return td;
     };
     var n = $('<td>').attr('name','no').css(this.tableCss).text(no);
-    var v = createTd(viewName,'viewName');
-    var p = createTd(projectName,'projectName');
-    var t = createTd(taskName,'taskName');
-    var ti = createTd(time,'time');
+    var v = createTd(viewName,'viewName',no);
+    var p = createTd(projectName,'projectName',no);
+    $("<div>").attr({"id":"suggest_projectName_"+no,"name":"suggest_projectName"}).css(this.suggestAreaCss).appendTo(p);    var t = createTd(taskName,'taskName',no);
+    $("<div>").attr({"id":"suggest_taskName_"+no,"name":"suggest_taskName"}).css(this.suggestAreaCss).appendTo(t);
+    var ti = createTd(time,'time',no);
     var closeTd = $('<td>').css(this.tableCss).append($('<input>').attr({'type':'button','value':'×'}).css('width','20px').on('click',function(){resultTr.remove();}));
     return resultTr.append(n,v, p, t, ti,closeTd);
   }
@@ -113,9 +125,10 @@ SettingWindowOperator.prototype.messageArea = $('<ul>').attr("id","messageArea")
 // 設定窓下部メッセージ設定。
 SettingWindowOperator.prototype.messageAreaSetting = function(){[
   "表示名 : 表示される名称。",
-  "プロジェクト名 : プロジェクトの作業名称。時間入力する所の値をそのままコピーしてください。「（」などもコピーしてください。",
-  "タスク名 : ↑のプロジェクト名の「+」を押した中にある項目。数値もそのままコピーしてください。",
-  "時間 : 設定される時間。「00:15」や「01:00」のような形式で入力してください。"
+  "プロジェクト名 : プロジェクトの作業名称。時間入力する所の値を入力してください。",
+  "タスク名 : ↑のプロジェクト名の「+」を押した中にある項目。数値もそのまま入力してください。",
+  "時間 : 設定される時間。「00:15」や「01:00」のような形式で入力してください。",
+  "注意 : 「入力欄追加」した場合、入力補完は効きません。（修正予定。。。）",
 ].forEach((s)=>{this.messageArea.append($('<li>').text(s))})};
 
 // 設定テーブル

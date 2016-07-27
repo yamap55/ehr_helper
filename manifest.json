@@ -15,6 +15,7 @@
       ],
       "js": [
         "js/lib/jquery-2.2.4.min.js",
+        "js/lib/suggest.js",
         "js/util.js",
         "js/setting-table-operator.js",
         "js/ehrhelper.js",
