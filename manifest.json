@@ -13,6 +13,7 @@
       "matches": [
         "https://*/*/attendance/dailyTimeManagementUpdate.do*"
       ],
+      "css": ["css/style.css"],
       "js": [
         "js/lib/jquery-2.2.4.min.js",
         "js/lib/suggest.js",

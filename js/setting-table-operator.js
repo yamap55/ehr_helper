@@ -1,20 +1,6 @@
 
 var SettingWindowOperator = function(data) {
-  this.tableCss = {
-    'border-collapse': 'collapse',
-    'border': '1px solid #333'
-  };
-  this.suggestAreaCss = {
-    "display":"none",
-    "width": "200px",
-    "overflow": "hidden",
-    "white-space": "nowrap",
-    "position": "absolute",
-    "background-color": "#FFFFFF",
-    "border": "1px solid #CCCCFF",
-    "font-size": "90%",
-  };
-  this.settingTable = $('<table>').attr({'id':'settingTable'}).css(this.tableCss);
+  this.settingTable = $('<table>').attr({'id':'settingTable','class':'settingTable'});
   this.data = data;
   this.settingWindow.append(this.closeButton,this.saveButton,this.addTrButton,this.settingTable,this.messageArea);
   this.init();
@@ -63,13 +49,7 @@ SettingWindowOperator.prototype.getSettingData = function() {
 };
 
 // 設定窓
-SettingWindowOperator.prototype.settingWindow = $('<div>').css({
-  'position': 'fixed',
-  'top': '10%',
-  'left': '10%',
-  'width': '80%',
-  'background-color': 'gray'
- }).attr({
+SettingWindowOperator.prototype.settingWindow = $('<div>').attr({
   'id': 'settingWindow'
 }).hide();
 
@@ -88,18 +68,18 @@ SettingWindowOperator.prototype.saveButton = $('<input>').attr({
 // tr作成関数。
 SettingWindowOperator.prototype.createTr = function (no,viewName, projectName, taskName, time, thFlag) {
   if (thFlag) {
-    var td = $('<th>').css(this.tableCss);
+    var td = $('<th>').attr('class','settingTable');
     var n = td.clone().text(no);
     var v = td.clone().text(viewName);
     var p = td.clone().text(projectName);
     var t = td.clone().text(taskName);
     var ti = td.clone().text(time);
     var h = td.clone().text("-");
-    return $('<tr>',{'id':'tablehead'}).css(this.tableCss).append(n,v, p, t, ti,h);
+    return $('<tr>',{'id':'tablehead','class':'settingTable'}).append(n,v, p, t, ti,h);
   } else {
-    var resultTr = $('<tr>').css(this.tableCss);
+    var resultTr = $('<tr>').attr('class','settingTable');
     var createTd = (str,name,no)=> {
-      var td = $('<td>').css(this.tableCss);
+      var td = $('<td>').attr('class','settingTable');
       $('<input>').attr({
         'type':'text',
         'id':name+'_'+no,
@@ -108,13 +88,16 @@ SettingWindowOperator.prototype.createTr = function (no,viewName, projectName, t
       }).css('display','block').val(str).appendTo(td);
       return td;
     };
-    var n = $('<td>').attr('name','no').css(this.tableCss).text(no);
+    // 補完用Div
+    var suggestDiv = $("<div>").attr({'class':'suggest'});
+    var n = $('<td>').attr({'name':'no','class':'settingTable'}).text(no);
     var v = createTd(viewName,'viewName',no);
     var p = createTd(projectName,'projectName',no);
-    $("<div>").attr({"id":"suggest_projectName_"+no,"name":"suggest_projectName"}).css(this.suggestAreaCss).appendTo(p);    var t = createTd(taskName,'taskName',no);
-    $("<div>").attr({"id":"suggest_taskName_"+no,"name":"suggest_taskName"}).css(this.suggestAreaCss).appendTo(t);
+    suggestDiv.clone().attr({"id":"suggest_projectName_"+no,"name":"suggest_projectName"}).appendTo(p);
+    var t = createTd(taskName,'taskName',no);
+    suggestDiv.clone().attr({"id":"suggest_taskName_"+no,"name":"suggest_taskName"}).appendTo(t);
     var ti = createTd(time,'time',no);
-    var closeTd = $('<td>').css(this.tableCss).append($('<input>').attr({'type':'button','value':'×'}).css('width','20px').on('click',function(){resultTr.remove();}));
+    var closeTd = $('<td>').attr('class','settingTable').append($('<input>').attr({'type':'button','value':'×'}).css('width','20px').on('click',function(){resultTr.remove();}));
     return resultTr.append(n,v, p, t, ti,closeTd);
   }
 };

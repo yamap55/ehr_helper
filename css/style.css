@@ -1,0 +1,58 @@
+#operationContainer {
+  position: fixed;
+  top: 50%;
+  right: 10px;
+  z-index: 999;
+  width: 120px;
+  background: #F4A28D;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding-bottom: 10px;
+}
+#settingWindow {
+  position: fixed;
+  top: 10%;
+  left': 10%;
+  width': 80%;
+  background-color: gray;
+ }
+.settingTable {
+  border-collapse': collapse;
+  border': 1px solid #333;
+}
+#operationContainer #closeBtn {
+  cursor: pointer;
+  font-size: 150%;
+  text-decoration: none;
+  float: right;
+}
+#operationContainer p {
+  cursor: pointer;
+  text-decoration: underline;
+}
+#operationContainer > * {
+  margin : 0px 0px 0px 0px;
+}
+
+/* 入力補完 */
+.suggest {
+    position: absolute;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCFF;
+    font-size: 90%;
+    width: 200px;
+}
+.suggest div {
+    display: block;
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.suggest div.select{ /* キー上下で選択した場合のスタイル */
+    color: #FFFFFF;
+    background-color: #3366FF;
+}
+.suggest div.over{ /* マウスオーバ時のスタイル */
+    background-color: #99CCFF;
+}

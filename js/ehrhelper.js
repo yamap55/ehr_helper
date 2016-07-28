@@ -9,6 +9,7 @@ EhrHelper.prototype.timeClockNotification = function () {
     return $(this).find('h2').text() == '出退社時刻';
   });
   var tds = div.find('td');
+  // EHR本体側で背景色を!importしているため、直接Styleに設定。
   var css = {
     'cssText': 'background-color : red !important'
   };
@@ -56,29 +57,12 @@ EhrHelper.prototype.addTimeButton = function() {
 };
 
 // 操作領域。
-EhrHelper.prototype.operationContainer = $('<div id=\'operationContainer\'>').css({
-    'position': 'fixed',
-    'top': '250px',
-    'right': '10px',
-    'z-index': '999',
-    'width': '120px',
-    'background': '#F4A28D',
-    'border-radius': '10px',
-    '-moz-border-radius': '10px',
-    '-webkit-border-radius': '10px',
-    'padding-bottom': '10px'
-  }
-);
+EhrHelper.prototype.operationContainer = $('<div>').attr({'id':'operationContainer'});
 
 // xボタン。（閉じるボタン）
 EhrHelper.prototype.closeButton =  $('<a>').attr({"id":"closeBtn","href":"#"}).text('×').on('click', function () {
   $(this).closest('#operationContainer').hide();
   return false;
-}).css({
-  'cursor': 'pointer',
-  'font-size': '150%',
-  'text-decoration': 'none',
-  'float':'right',
 });
 
 // 操作領域追加。
@@ -125,14 +109,9 @@ EhrHelper.prototype.addSettingData = function (){
   var buttonList = $.map(Util.getSaveData().settingList, function (settingData) {
     return $('<p>').text(settingData[0]).bind('click', function () {
       self.setTime(settingData[1], settingData[2], settingData[3]);
-    }).css({
-      'cursor': 'pointer',
-      'text-decoration': 'underline'
     });
   });
   this.operationContainer.append(buttonList);
-  $('#operationContainer > *').css('margin', '0px 0px 0px 0px');
-  $('#operationContainer > li > span').css('width', '50px');
 };
 
 // 本人コメント欄のテンプレートを追加する。
