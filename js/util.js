@@ -1,4 +1,7 @@
+// localStorageのKEY
 var KEY = 'EHR_HELPER';
+
+// 設定のデフォルト値
 var DEFAULT_SETTING_LIST = [
   ['会議A',
   '会議（000003000000）',
@@ -11,8 +14,11 @@ var DEFAULT_SETTING_LIST = [
     '0030',
   ]
 ];
+
+// 時間増減ボタンのデフォルト設定
 var DEFAULT_TIME_ADD_LIST = ["all","+5","+30","-5","-30"];
 
+// コメント欄のテンプレートデフォルト値
 var DEFAULT_COMMENT_TEMPLATES = {
   "":"",
   "電車遅延":"電車遅延のため始業時刻修正。",
