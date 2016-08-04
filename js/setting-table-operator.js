@@ -24,7 +24,13 @@ SettingWindowOperator.prototype.init = function() {
       return $(this).text();
     }).get();
     var maxNo = Math.max.apply(null,indexList);
-    this.settingTable.append(this.createTr(maxNo+1,'', '', '', ''));
+    var tr = this.createTr(maxNo+1,'', '', '', '');
+    this.settingTable.append(tr);
+    // 入力補完を設定する。
+    var projectId = tr.find("[name='projectName']").attr("id");
+    var taskId = tr.find("[name='taskName']").attr("id");
+    Util.projectSuggestSetting(this.data, projectId);
+    Util.taskSuggestSetting(this.data, projectId, taskId);
   });
 };
 
@@ -121,7 +127,8 @@ SettingWindowOperator.prototype.settingSettingTable = function() {
   this.settingTable.append(this.createTr('No','表示名', 'プロジェクト名', 'タスク名', '時間', true));
   // データを復旧。
   $.each(Util.getSaveData().settingList,function(i,d) {
-    self.settingTable.append(self.createTr(i+1,d[0], d[1], d[2], d[3]));
+    var tr = self.createTr(i+1,d[0], d[1], d[2], d[3]);
+    self.settingTable.append(tr);
   });
 };
 

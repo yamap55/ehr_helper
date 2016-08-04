@@ -134,6 +134,17 @@ EhrHelper.prototype.addSettingWindowButton = function (){
   this.settingWindow.hide();
   this.settingWindowButton.prependTo(this.operationContainer);
   $('body').append(this.settingWindow);
+  var self = this;
+  this.settingWindow.find("tr").each(function(i,tr){
+    if (i == 0) {
+      return;
+    }
+    // 入力補完を設定する。
+    var projectId = $(tr).find("[name='projectName']").attr("id");
+    var taskId = $(tr).find("[name='taskName']").attr("id");
+    Util.projectSuggestSetting(self.data, projectId);
+    Util.taskSuggestSetting(self.data, projectId, taskId);
+  });
 };
 
 // 設定ボタン

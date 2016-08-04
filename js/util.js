@@ -86,5 +86,36 @@ var Util = {
       }
       this.setTimeForText(targetTextBox, remainingTime);
     }
+  },
+  // Projectの補完設定。
+  projectSuggestSetting : function(data, inputId){
+      new Suggest.Local(
+        inputId,    // 入力のエレメントID
+        "suggest_" + inputId, // 補完候補を表示するエリアのID
+        data.map(function(o){return o.name;}),      // 補完候補の検索対象となる配列
+        {dispMax: 10, interval: 1000}); // オプション
+  },
+  // プロジェクトをキーに紐づくタスクを取得する。
+  getTaskListFromProject : function(data, projectId) {
+    var projectName = $("#" + projectId).val();
+    var taskList = [];
+    if (projectName) {
+      var pj = data.find(function(o){return o.name == projectName});
+      taskList = pj ? pj.jobs.map((o)=>{return o.name}) : [];
+    }
+    return taskList;
+  },
+  // タスクに補完設定を追加。
+  taskSuggestSetting : function(data, projectId, taskId) {
+    var taskList = this.getTaskListFromProject(data, projectId);
+    var taskSuggest = new Suggest.Local(
+      taskId,    // 入力のエレメントID
+      "suggest_" + taskId, // 補完候補を表示するエリアのID
+      taskList,  // 補完候補の検索対象となる配列
+      {dispMax: 10, interval: 1000}); // オプション
+    var self = this;
+    $("#" + projectId).on("blur",function() {
+      taskSuggest.candidateList = self.getTaskListFromProject(data, projectId);
+    });
   }
 };
