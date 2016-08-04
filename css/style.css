@@ -13,12 +13,12 @@
 #settingWindow {
   position: fixed;
   top: 10%;
-  left': 10%;
-  width': 80%;
+  left: 10%;
+  width: 80%;
   background-color: gray;
  }
 .settingTable {
-  border-collapse': collapse;
+  border-collapse: collapse;
   border': 1px solid #333;
 }
 #operationContainer #closeBtn {
