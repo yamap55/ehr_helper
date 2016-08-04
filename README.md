@@ -3,8 +3,11 @@
 [EHRの勤怠入力](http://www.leggenda-system.jp/EHR/module/attendance.html)を補助するChrome拡張機能です。
 
 ## インストール方法
-バージョン1になったらcrxにするのでそれまでは↓の手順でお願いします。
+1. [リリースページ](https://github.com/yamap55/ehr_helper/releases)から「ehr_helper.crx」を取得。
+2. [Chromeの拡張機能ページ](chrome://extensions/)を表示。
+3. 1で取得した「ehr_helper.crx」をドラッグ。
 
+### コードを直接インストールする場合はこちらの手順。
 1. cloneする。
   - ```git clone git@github.com:yamap55/ehr_helper.git```
 2. Chromeもしくはその派生ブラウザを開く。
